@@ -1,60 +1,43 @@
 class Solution {
+    int[] parent;
+    //each component of n nodes needs (n * (n - 1))/2 edges
     public int countCompleteComponents(int n, int[][] edges) {
-        // Build adjacency list
-        List<List<Integer>> adj = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            adj.add(new ArrayList<>());
+        parent = new int[n];
+        for(int i =0; i < n; i++){
+            parent[i] = i;
         }
-        for (int[] edge : edges) {
-            adj.get(edge[0]).add(edge[1]);
-            adj.get(edge[1]).add(edge[0]);
+        for(int[] edge : edges){
+            int a = edge[0], b = edge[1], pa = parent(a), pb = parent(b);
+            parent[pa] = pb;
         }
-        
-        // Find components using DFS
-        boolean[] visited = new boolean[n];
-        List<List<Integer>> components = new ArrayList<>();
-        
-        for (int i = 0; i < n; i++) {
-            if (!visited[i]) {
-                List<Integer> component = new ArrayList<>();
-                dfs(i, adj, visited, component);
-                components.add(component);
-            }
+        int[] nodeCount =  new int[n];
+        int[] edgeCount = new int[n];
+        for(int i = 0; i < n; i++){
+            nodeCount[parent(i)]++;
         }
-        
-        // Count complete components
-        int completeCount = 0;
-        for (List<Integer> component : components) {
-            int size = component.size();
-            int requiredEdges = size * (size - 1) / 2;  // edges in complete graph
-            int actualEdges = 0;
+        for(int[] edge : edges){
+            edgeCount[parent(edge[0])]++;
+        }
+        int out = 0;
+        for(int i = 0; i < n; i++){
             
-            // Count edges in this component
-            for (int i = 0; i < size; i++) {
-                for (int j = i + 1; j < size; j++) {
-                    int v1 = component.get(i);
-                    int v2 = component.get(j);
-                    if (adj.get(v1).contains(v2)) {
-                        actualEdges++;
-                    }
-                }
-            }
-            
-            if (actualEdges == requiredEdges) {
-                completeCount++;
+            int count = nodeCount[i], expected = (count * (count - 1))/2;
+            if(count == 0){
+                continue;
+            } else if(expected == edgeCount[i]){
+                out++;
             }
         }
-        
-        return completeCount;
+        return out;
     }
-    private void dfs(int vertex, List<List<Integer>> adj, boolean[] visited, List<Integer> component) {
-        visited[vertex] = true;
-        component.add(vertex);
-        
-        for (int neighbor : adj.get(vertex)) {
-            if (!visited[neighbor]) {
-                dfs(neighbor, adj, visited, component);
-            }
+    int parent(int n){
+        int p = parent[n];
+        if(p == n){
+            return p;
         }
+        int realParent = parent(p);
+        parent[n] = realParent;
+        return realParent;
     }
+
 }
