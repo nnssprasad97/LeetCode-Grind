@@ -3,9 +3,11 @@ class Solution {
         int cnt=0,max1=0;
         for(int i=0;i<nums.length;i++){
            if(nums[i]==1)cnt++;
-           max1=Math.max(max1,cnt);
-           if(nums[i]==0)cnt=0;
+           else{
+            max1=Math.max(max1,cnt);
+            cnt=0;
+           }
         }
-        return max1;
+        return max1=Math.max(max1,cnt);
     }
 }
