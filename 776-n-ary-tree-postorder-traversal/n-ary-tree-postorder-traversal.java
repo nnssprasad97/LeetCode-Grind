@@ -18,15 +18,17 @@ class Node {
 */
 
 class Solution {
+    List<Integer> ans;
     public List<Integer> postorder(Node root) {
-        List<Integer>list=new ArrayList<>();
-        pr(root,list);
-        return list;
+        ans = new ArrayList();
+        postOrder(root);
+        return ans;
     }
-    public List<Integer> pr(Node root,List<Integer>list){
-        if(root==null)return list;
-        for(Node n:root.children)list.addAll(postorder(n));
-        list.add(root.val);
-        return list;
+    private void postOrder(Node root){
+        if(root == null)
+            return;
+        for(Node temp: root.children)
+            postOrder(temp);
+        ans.add(root.val);
     }
 }
