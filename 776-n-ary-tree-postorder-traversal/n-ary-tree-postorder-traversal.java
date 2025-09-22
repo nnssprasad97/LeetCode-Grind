@@ -20,6 +20,10 @@ class Node {
 class Solution {
     public List<Integer> postorder(Node root) {
         List<Integer>list=new ArrayList<>();
+        pr(root,list);
+        return list;
+    }
+    public List<Integer> pr(Node root,List<Integer>list){
         if(root==null)return list;
         for(Node n:root.children)list.addAll(postorder(n));
         list.add(root.val);
