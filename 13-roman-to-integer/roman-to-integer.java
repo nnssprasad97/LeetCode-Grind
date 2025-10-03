@@ -1,19 +1,34 @@
+//Input: s = "III"
+//Output: 3
+//Explanation: III = 3.
+
+//Input: s = "LVIII"
+//Output: 58
+//Explanation: L = 50, V= 5, III = 3.
 class Solution {
     public int romanToInt(String s) {
-         Map<Character, Integer> map = new HashMap<>();
-        map.put('I', 1);
-        map.put('V', 5);
-        map.put('X', 10);
-        map.put('L', 50);
-        map.put('C', 100);
-        map.put('D', 500);
-        map.put('M', 1000);
-        int n = s.length();
         int total = 0;
-        for (int i = 0; i < n; i++) {
-            int value = map.get(s.charAt(i));
-            if(i<n-1 && value<map.get(s.charAt(i+1)))total-=value;
-            else total += value;
+        int previous = 0;
+
+        for (int i = s.length() - 1; i >= 0; i--) {
+            var current = switch (s.charAt(i)) {
+                case 'I' -> 1;
+                case 'V' -> 5;
+                case 'X' -> 10;
+                case 'L' -> 50;
+                case 'C' -> 100;
+                case 'D' -> 500;
+                case 'M' -> 1000;
+                default -> 0;
+            };
+
+            if (previous > current) {
+                total -= current;
+            } else {
+                total += current;
+                previous = current;
+            }
+
         }
         return total;
     }
