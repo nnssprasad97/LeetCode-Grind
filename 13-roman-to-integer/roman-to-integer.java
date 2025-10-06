@@ -1,10 +1,3 @@
-//Input: s = "III"
-//Output: 3
-//Explanation: III = 3.
-
-//Input: s = "LVIII"
-//Output: 58
-//Explanation: L = 50, V= 5, III = 3.
 class Solution {
     public int romanToInt(String s) {
         int total = 0;
