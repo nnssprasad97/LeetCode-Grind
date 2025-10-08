@@ -1,30 +1,28 @@
 class Solution {
-    public static int lowerBound(int[] arr, long x) {
-        int low = 0, high = arr.length - 1;
-        int ans = arr.length;
-        
-        while (low <= high) {
-            int mid = low + (high - low) / 2;
-            if (arr[mid] >= x) {
-                ans = mid;
-                high = mid - 1;
-            } else {
-                low = mid + 1;
-            }
-        }
-        return ans; // first index with value >= x
-    }
-
     public int[] successfulPairs(int[] spells, int[] potions, long success) {
-        Arrays.sort(potions);
-        int n = spells.length;
-        int[] res = new int[n];
-        for (int i = 0; i < n; i++) {
-            long minPotionNeeded = (success + spells[i] - 1) / spells[i]; // ceil(success/spell)
-            int index = lowerBound(potions, minPotionNeeded);
-            res[i] = potions.length - index;
+        int m = spells.length;
+        int n = potions.length;
+        int max = 0;
+        int[] res = new int[m];
+        for(int i=0; i<n; i++){
+            max = Math.max(max, potions[i]);
         }
-        
+        int[] map = new int[max+1];
+        for(int i=0; i<n; i++){
+            map[potions[i]]++;
+        }
+        int sum = 0;
+        for(int i=max; i>=0; i--){
+            sum+=map[i];
+            map[i] = sum;
+        }
+        for(int i=0; i<m; i++){
+            int spell = spells[i];
+            long index = (success + spell -1)/spell;
+            if(index <= max){
+                res[i] = map[(int) index];
+            } 
+        }
         return res;
     }
 }
