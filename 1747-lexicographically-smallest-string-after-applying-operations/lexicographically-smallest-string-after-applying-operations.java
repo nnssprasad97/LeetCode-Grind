@@ -1,31 +1,46 @@
 class Solution {
+
     public String findLexSmallestString(String s, int a, int b) {
-        Set<String>seen=new HashSet<>();
-        Queue<String>q=new LinkedList<>();
-        String small=s;
-        q.offer(s);
-        while(!q.isEmpty()){
-            String cur=q.poll();
-            if(!seen.add(cur))continue;
-            if(cur.compareTo(small)<0)small=cur;
-            String addnew=addnew(cur,a);
-            String newrotate=newrotate(cur,b);
-            q.offer(addnew);
-            q.offer(newrotate);
+        int n = s.length();
+        String res = s;
+        s = s + s;
+        int g = gcd(b, n);
+
+        for (int i = 0; i < n; i += g) {
+            char[] t = s.substring(i, i + n).toCharArray();
+            add(t, n, a, 1);
+            if (b % 2 != 0) {
+                add(t, n, a, 0);
+            }
+            String tStr = new String(t);
+            if (tStr.compareTo(res) < 0) {
+                res = tStr;
+            }
         }
-        return small;
+        return res;
     }
-    public static String addnew(String s,int a){
-        char[] arr=s.toCharArray();
-        for(int i=1;i<arr.length;i+=2){
-            int dig=(arr[i]-'0'+a)%10;
-            arr[i]=(char)(dig+'0');
+
+    public void add(char[] t, int n, int a, int start) {
+        int minVal = 10;
+        int times = 0;
+        for (int i = 0; i < 10; i++) {
+            int added = ((t[start] - '0') + i * a) % 10;
+            if (added < minVal) {
+                minVal = added;
+                times = i;
+            }
         }
-        return new String(arr);
+        for (int i = start; i < n; i += 2) {
+            t[i] = (char) ('0' + (((t[i] - '0') + times * a) % 10));
+        }
     }
-    public static String newrotate(String s,int b){
-        int n=s.length();
-        b%=n;
-        return s.substring(n-b)+s.substring(0,n-b);
+
+    public int gcd(int num1, int num2) {
+        while (num2 != 0) {
+            int temp = num1;
+            num1 = num2;
+            num2 = temp % num2;
+        }
+        return num1;
     }
 }
