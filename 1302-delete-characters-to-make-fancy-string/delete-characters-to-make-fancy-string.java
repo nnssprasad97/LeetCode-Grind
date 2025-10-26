@@ -1,11 +1,13 @@
-class Solution {
+public class Solution {
     public String makeFancyString(String s) {
-        StringBuilder res=new StringBuilder();
-        for(int i=0;i<s.length();i++){
-            int len=res.length();
-            char c=s.charAt(i);
-            if(len<2 || !(res.charAt(len-1)==c && res.charAt(len-2)==c))res.append(c);
+        char[] arr = s.toCharArray();
+        int write = 0;
+        for (int read = 0; read < arr.length; read++) {
+            if (write >= 2 && arr[read] == arr[write - 1] && arr[read] == arr[write - 2]) {
+                continue; // skip if it would create triple
+            }
+            arr[write++] = arr[read];
         }
-        return res.toString();
+        return new String(arr, 0, write);
     }
 }
