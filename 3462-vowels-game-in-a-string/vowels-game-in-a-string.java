@@ -1,13 +1,11 @@
 class Solution {
     public boolean doesAliceWin(String s) {
-        for (char c : s.toCharArray()) {
-            if (isVowel(c)) {
-                return true;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            switch(c) {
+                case 'a','e','i','o','u': return true;
             }
         }
         return false;
-    }
-    private boolean isVowel(char c) {
-        return c == 'a' || c == 'e' || c == 'i' || c == 'o' || c == 'u';
     }
 }
