@@ -1,22 +1,51 @@
 class Solution {
+    private int MAX=Integer.MAX_VALUE;
+    private int MIN= Integer.MIN_VALUE;
     public int countUnguarded(int m, int n, int[][] guards, int[][] walls) {
         int[][] grid = new int[m][n];
-        for (int[] g : guards) grid[g[0]][g[1]] = 1;
-        for (int[] w : walls) grid[w[0]][w[1]] = 2;
-        int[][] dirs = {{-1,0},{1,0},{0,1},{0,-1}};
-        for (int[] g : guards) {
-            for (int[] d : dirs) {
-                int r = g[0] + d[0], c = g[1] + d[1];
-                while (r >= 0 && r < m && c >= 0 && c < n && grid[r][c] != 1 && grid[r][c] != 2) {
-                    if (grid[r][c] == 0) grid[r][c] = 3;
-                    r += d[0]; c += d[1];
+        for (int[] wall : walls) {
+            grid[wall[0]][wall[1]] = MIN;
+        }
+
+        for(int[] guard:guards){
+            grid[guard[0]][guard[1]]=MAX;
+        }
+
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(grid[i][j]==MAX)
+                {
+                    for(int k=j+1;k<n;k++){
+                        if(grid[i][k]==MAX || grid[i][k]==MIN) break;
+                        grid[i][k]-=1;
+                    }
+                    for(int k=j-1;k>=0;k--){
+                        if(grid[i][k]==MAX || grid[i][k]==MIN) break;
+                        grid[i][k]-=1;
+                    }
+                    for(int k=i+1;k<m;k++){
+                        if(grid[k][j]==MAX || grid[k][j]==MIN) break;
+                        grid[k][j]-=1;
+                    }
+                    for(int k=i-1;k>=0;k--){
+                        if(grid[k][j]==MAX || grid[k][j]==MIN) break;
+                        grid[k][j]-=1;
+                    }
                 }
             }
         }
-        int res = 0;
-        for (int i = 0; i < m; i++)
-            for (int j = 0; j < n; j++)
-                if (grid[i][j] == 0) res++;
-        return res;
+        int count=0;
+        
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                // System.out.print(grid[i][j]+" ");
+                if(grid[i][j]==0) count++;
+            }
+            // System.out.println();
+        }
+
+        return count;
     }
 }
